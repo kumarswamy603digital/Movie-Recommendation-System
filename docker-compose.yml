@@ -1,0 +1,50 @@
+# Movie Recommendation System — local orchestration.
+# Usage: docker compose up --build
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: movierec-backend:latest
+    container_name: movierec-backend
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: "sqlite:////data/app.db"
+      DATA_DIR: "/data"
+      PROCESSED_DIR: "/data/processed"
+      ARTIFACTS_DIR: "/data/artifacts"
+      CORS_ORIGINS: "http://localhost:5173"
+      TMDB_API_KEY: ""           # set to enable poster / overview enrichment
+      HYBRID_WEIGHT_POPULARITY: "0.20"
+      HYBRID_WEIGHT_CONTENT: "0.35"
+      HYBRID_WEIGHT_CF: "0.45"
+      LOG_LEVEL: "INFO"
+    volumes:
+      - appdata:/data
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:8000/api/v1/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+
+  frontend:
+    image: node:20-alpine
+    container_name: movierec-frontend-dev
+    working_dir: /app
+    command: sh -c "npm install && npm run dev -- --host 0.0.0.0"
+    environment:
+      VITE_API_BASE_URL: "http://localhost:8000"
+      VITE_DEMO_USER_ID: "1"
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      - backend
+
+volumes:
+  appdata:

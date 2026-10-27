@@ -1,0 +1,60 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+.pytest_cache/
+.coverhtmlcov/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Environment / secrets
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# Datasets and derived artifacts (large; regenerate via documented scripts)
+backend/data/ml-100k/
+backend/data/ml-100k.zip
+backend/data/ml-1m/
+backend/data/ml-1m.zip
+backend/data/ml-25m/
+backend/data/ml-25m.zip
+backend/data/processed/
+backend/artifacts/*.joblib
+backend/artifacts/*.pkl
+backend/artifacts/*.npz
+# NOTE: evaluation.json and model_version.json are intentionally NOT ignored.
+# They are small text deliverables the analytics dashboard needs to display
+# real metrics; see docs/model_evaluation.md.
+
+# SQLite
+*.sqlite3
+*.db
+backend/app.db
+
+# Node / frontend
+node_modules/
+dist/
+dist-ssr/
+.vite/
+coverage/
+
+# Editors / OS
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
